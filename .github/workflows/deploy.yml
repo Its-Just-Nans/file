@@ -33,11 +33,11 @@ jobs:
             - name: Set up cargo cache
               uses: Swatinem/rust-cache@v2
             - name: Build
-              run: cd web_demo/ && trunk build --release --public-url ./
+              run: trunk build --release --public-url ./
             - name: Upload coverage artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  path: "web_demo/dist"
+                  path: "dist"
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v4

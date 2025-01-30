@@ -22,21 +22,20 @@
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
-                font-size: 2em;
+                padding: 5px;
             }
             #dropHandler .startDiv {
                 text-align: center;
+                font-size: 2em;
             }
             details {
                 margin-bottom: 5px;
-                padding-left: 20px;
             }
             summary {
                 cursor: pointer;
             }
             details > details {
                 margin-left: 10px;
-                padding-left: 20px;
             }
             details > span {
                 margin-left: 20px;
@@ -51,23 +50,33 @@
                 background-color: lightgreen;
             }
             .error {
-                white-space: pre-wrap;
+                white-space: pre;
                 background-color: orangered;
             }
             #string {
-                white-space: pre-wrap;
-                word-wrap: break-word;
+                white-space: pre;
                 background: lightblue;
+                overflow: auto;
             }
             #binary {
                 white-space: pre-wrap;
-                word-wrap: break-word;
+                overflow: auto;
                 background: lightcoral;
+                word-break: break-word;
             }
             #hex {
                 white-space: pre-wrap;
-                word-wrap: break-word;
+                overflow: auto;
                 background: lightgoldenrodyellow;
+            }
+            #infos {
+                white-space: pre;
+                overflow: auto;
+            }
+            audio,
+            video,
+            img {
+                width: 100%;
             }
         </style>
     </head>
@@ -109,40 +118,41 @@
                     parsed.file_len_KiB = (parsed.file_len / 1024).toFixed(2) + " KiB (1024)";
                     parsed.file_len_KB = (parsed.file_len / 1000).toFixed(2) + " KB (1000)";
                     if (parsed.file_len > 1000000) {
-                        parsed.file_len_MiB = (parsed.file_len / (1024 * 1024)).toFixed(2) + " MiB (1024)";
-                        parsed.file_len_MB = (parsed.file_len / (1000 * 1000)).toFixed(2) + " MB (1000)";
+                        parsed.file_len_MiB = (parsed.file_len / (1024 * 1024)).toFixed(2) + " MiB (1024²)";
+                        parsed.file_len_MB = (parsed.file_len / (1000 * 1000)).toFixed(2) + " MB (1000²)";
                     }
                 }
                 document.getElementsByClassName("startDiv")[0].remove();
-                let pre = document.createElement("pre");
-                pre.innerHTML = JSON.stringify(parsed, null, 2);
-                document.getElementById("dropHandler").appendChild(pre);
+                let div = document.createElement("div");
+                div.id = "infos";
+                div.innerHTML = JSON.stringify(parsed, null, 2);
+                document.getElementById("dropHandler").appendChild(div);
                 let details = document.createElement("details");
                 let summary = document.createElement("summary");
                 summary.innerHTML = "as string";
                 details.appendChild(summary);
                 let span = document.createElement("pre");
                 span.id = "string";
-                span.innerHTML = await file.text();
+                span.innerText = await file.text();
                 details.appendChild(span);
                 document.getElementById("dropHandler").appendChild(details);
                 let details2 = document.createElement("details");
                 let summary2 = document.createElement("summary");
-                summary2.innerHTML = "as [u8]";
+                summary2.innerText = "as [u8]";
                 details2.appendChild(summary2);
                 let span2 = document.createElement("pre");
                 span2.id = "binary";
-                span2.innerHTML = u8.toString();
+                span2.innerText = u8.toString();
                 details2.appendChild(span2);
                 document.getElementById("dropHandler").appendChild(details2);
 
                 let hexe = document.createElement("details");
                 let hexesum = document.createElement("summary");
-                hexesum.innerHTML = "as hex";
+                hexesum.innerText = "as hex";
                 hexe.appendChild(hexesum);
                 let hex = document.createElement("pre");
                 hex.id = "hex";
-                hex.innerHTML = u8.reduce((acc, val) => acc + val.toString(16).padStart(2, "0") + " ", "");
+                hex.innerText = u8.reduce((acc, val) => acc + val.toString(16).padStart(2, "0") + " ", "");
                 hexe.appendChild(hex);
                 document.getElementById("dropHandler").appendChild(hexe);
 
@@ -154,6 +164,26 @@
                     summary3.innerHTML = "Image";
                     details3.appendChild(summary3);
                     details3.appendChild(img);
+                    document.getElementById("dropHandler").appendChild(details3);
+                } else if (parsed?.file_type?.kind == "Audio") {
+                    let audio = document.createElement("audio");
+                    audio.controls = true;
+                    audio.src = URL.createObjectURL(file);
+                    let details3 = document.createElement("details");
+                    let summary3 = document.createElement("summary");
+                    summary3.innerHTML = "Audio";
+                    details3.appendChild(summary3);
+                    details3.appendChild(audio);
+                    document.getElementById("dropHandler").appendChild(details3);
+                } else if (parsed?.file_type?.kind == "Video") {
+                    let video = document.createElement("video");
+                    video.controls = true;
+                    video.src = URL.createObjectURL(file);
+                    let details3 = document.createElement("details");
+                    let summary3 = document.createElement("summary");
+                    summary3.innerHTML = "Video";
+                    details3.appendChild(summary3);
+                    details3.appendChild(video);
                     document.getElementById("dropHandler").appendChild(details3);
                 }
             };

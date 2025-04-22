@@ -13,12 +13,12 @@
                 margin: 0;
             }
             #dropHandler {
-                width: 100%;
                 min-height: 50vh;
                 background-color: #f0f0f0;
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
+                padding: 10px;
             }
             #dropHandler .startDiv {
                 text-align: center;
@@ -136,22 +136,32 @@
                 div.id = "infos";
                 div.innerHTML = JSON.stringify(parsed, null, 2);
                 document.getElementById("dropHandler").appendChild(div);
+
                 let details = document.createElement("details");
                 let summary = document.createElement("summary");
                 summary.innerHTML = "as string";
                 details.appendChild(summary);
                 let span = document.createElement("pre");
                 span.id = "string";
-                span.innerText = await file.text();
+                span.innerText = "Loading...";
+                summary.onclick = async (ev) => {
+                    span.innerText = await file.text();
+                    summary.onclick = () => {};
+                };
                 details.appendChild(span);
                 document.getElementById("dropHandler").appendChild(details);
+
                 let details2 = document.createElement("details");
                 let summary2 = document.createElement("summary");
                 summary2.innerText = "as [u8]";
                 details2.appendChild(summary2);
                 let span2 = document.createElement("pre");
                 span2.id = "binary";
-                span2.innerText = u8.toString();
+                span2.innerText = "Loading...";
+                summary2.onclick = (ev) => {
+                    span2.innerText = u8.toString();
+                    summary2.onclick = () => {};
+                };
                 details2.appendChild(span2);
                 document.getElementById("dropHandler").appendChild(details2);
 
@@ -161,7 +171,11 @@
                 hexe.appendChild(hexesum);
                 let hex = document.createElement("pre");
                 hex.id = "hex";
-                hex.innerText = u8.reduce((acc, val) => acc + val.toString(16).padStart(2, "0") + " ", "");
+                hex.innerText = "Loading...";
+                hexesum.onclick = (ev) => {
+                    hex.innerText = u8.reduce((acc, val) => acc + val.toString(16).padStart(2, "0") + " ", "");
+                    hexesum.onclick = () => {};
+                };
                 hexe.appendChild(hex);
                 document.getElementById("dropHandler").appendChild(hexe);
 

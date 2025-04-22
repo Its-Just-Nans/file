@@ -19,10 +19,15 @@
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
-                padding: 5px;
             }
             #dropHandler .startDiv {
                 text-align: center;
+                margin: auto;
+            }
+            #dropHandler .startDiv ul {
+                text-align: initial;
+            }
+            #dropHandler .startDiv .start {
                 font-size: 2em;
             }
             details {
@@ -85,6 +90,13 @@
             <div class="startDiv">
                 <input type="file" id="file-input" />
                 <div class="start">Drop file here</div>
+                <div>
+                    <ul>
+                        <li>Image, Music, Video</li>
+                        <li>Exif</li>
+                        <li>Font view</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </body>
@@ -153,9 +165,10 @@
                 hexe.appendChild(hex);
                 document.getElementById("dropHandler").appendChild(hexe);
 
+                const source = URL.createObjectURL(file);
                 if (parsed?.file_type?.kind == "Image") {
                     let img = document.createElement("img");
-                    img.src = URL.createObjectURL(file);
+                    img.src = source;
                     let details3 = document.createElement("details");
                     let summary3 = document.createElement("summary");
                     summary3.innerHTML = "Image";
@@ -165,7 +178,7 @@
                 } else if (parsed?.file_type?.kind == "Audio") {
                     let audio = document.createElement("audio");
                     audio.controls = true;
-                    audio.src = URL.createObjectURL(file);
+                    audio.src = source;
                     let details3 = document.createElement("details");
                     let summary3 = document.createElement("summary");
                     summary3.innerHTML = "Audio";
@@ -175,12 +188,28 @@
                 } else if (parsed?.file_type?.kind == "Video") {
                     let video = document.createElement("video");
                     video.controls = true;
-                    video.src = URL.createObjectURL(file);
+                    video.src = source;
                     let details3 = document.createElement("details");
                     let summary3 = document.createElement("summary");
                     summary3.innerHTML = "Video";
                     details3.appendChild(summary3);
                     details3.appendChild(video);
+                    document.getElementById("dropHandler").appendChild(details3);
+                } else if (parsed?.file_type?.kind == "Font") {
+                    let text = document.createElement("p");
+                    let fontName = "UploadedFont";
+                    text.id = "font";
+                    text.innerText = "The fox jumps over the lazy dog";
+                    text.style.fontSize = "2em";
+                    text.style.fontFamily = fontName;
+                    let style = document.createElement("style");
+                    style.innerHTML = `@font-face { font-family: "${fontName}"; src: url('${source}');}`;
+                    let details3 = document.createElement("details");
+                    let summary3 = document.createElement("summary");
+                    summary3.innerHTML = "Font";
+                    details3.appendChild(summary3);
+                    details3.appendChild(style);
+                    details3.appendChild(text);
                     document.getElementById("dropHandler").appendChild(details3);
                 }
             };

@@ -11,7 +11,6 @@ struct FileFormatDetected {
     short_name: String,
     media_type: String,
     extension: String,
-    is_img: bool,
     exif_data: Vec<String>,
 }
 
@@ -58,7 +57,6 @@ pub fn process_file(data: &[u8]) -> String {
                 .unwrap_or("".to_string()),
             media_type: fmt.media_type().to_string(),
             extension: fmt.extension().to_string(),
-            is_img,
             exif_data,
         },
     };

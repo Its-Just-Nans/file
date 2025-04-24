@@ -1,4 +1,4 @@
-# whatisthis [![crates.io version](https://img.shields.io/crates/v/whatisthis)](https://crates.io/crates/whatisthis) ![crates.io downloads](https://img.shields.io/crates/d/whatisthis)
+# whatisthis [![crates.io version](https://img.shields.io/crates/v/whatisthis)](https://crates.io/crates/whatisthis) ![crates.io downloads](https://img.shields.io/crates/d/whatisthis) [![docs.rs](https://img.shields.io/docsrs/whatisthis)](https://crates.io/crates/whatisthis)
 
 - <https://whatisthis.n4n5.dev> - online demo
 - <https://github.com/Its-Just-Nans/whatisthis> - repository

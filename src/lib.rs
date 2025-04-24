@@ -165,4 +165,6 @@ pub fn get_size(size: usize, human: bool, iec: bool) -> String {
 
 pub mod cli;
 pub use cli::cli_main;
+
+#[cfg(target_arch = "wasm32")]
 pub mod wasm;

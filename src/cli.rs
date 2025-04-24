@@ -8,6 +8,7 @@ use crate::Output;
 #[command(version, about, long_about = None)]
 struct Args {
     /// List of files to process
+    #[arg(required = true)]
     file: Vec<String>,
 
     /// Output in JSON format

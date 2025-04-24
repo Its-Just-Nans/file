@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "A tool to identify file types based on their content"
 edition = "2021"
 license = "MIT"
+documentation = "https://docs.rs/whatisthis"
+homepage = "https://file.n4n5.dev/"
+repository = "https://github.com/Its-Just-Nans/whatisthis"
 
 [dependencies]
 file-format = { version = "0.26.0", features = ["reader"] }

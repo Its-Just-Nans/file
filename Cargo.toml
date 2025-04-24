@@ -1,7 +1,9 @@
 [package]
-name = "file"
+name = "whatisthis"
 version = "0.1.0"
+description = "A tool to identify file types based on their content"
 edition = "2021"
+license = "MIT"
 
 [dependencies]
 file-format = { version = "0.26.0", features = ["reader"] }
@@ -28,3 +30,4 @@ zip = { version = "2.6.1", default-features = false, features = [
     "time",
     "zstd",
 ] }
+clap = { version = "4.5.37", features = ["derive"] }

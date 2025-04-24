@@ -2,7 +2,6 @@ use file_format::FileFormat;
 use serde::Serialize;
 use serde_json::{Map, Value};
 use std::io::BufReader;
-use wasm_bindgen::prelude::wasm_bindgen;
 
 #[derive(Serialize)]
 pub struct FileFormatDetected {
@@ -141,15 +140,6 @@ pub fn process_file_raw(data: &[u8], file_path: &str) -> Output {
     output
 }
 
-#[wasm_bindgen]
-pub fn process_file(data: &[u8], filename: &str) -> String {
-    let output = process_file_raw(data, filename);
-    match serde_json::to_string(&output) {
-        Ok(json) => json,
-        Err(_) => "{\"error\": \"Error serializing output\"}".to_string(),
-    }
-}
-
 pub fn get_size(size: usize, human: bool, iec: bool) -> String {
     if !human {
         return size.to_string();
@@ -175,3 +165,4 @@ pub fn get_size(size: usize, human: bool, iec: bool) -> String {
 
 pub mod cli;
 pub use cli::cli_main;
+pub mod wasm;

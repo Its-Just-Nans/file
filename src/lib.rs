@@ -47,7 +47,14 @@ fn get_zip(data: &[u8]) -> Value {
     let reader = std::io::Cursor::new(data);
     let reader = BufReader::new(reader);
 
-    let mut archive = zip::ZipArchive::new(reader).unwrap();
+    let mut archive = match zip::ZipArchive::new(reader) {
+        Ok(archive) => archive,
+        Err(err) => {
+            let mut object: Map<String, Value> = Map::new();
+            object.insert("error".to_string(), err.to_string().into());
+            return object.into();
+        }
+    };
 
     let mut object: Map<String, Value> = Map::new();
 

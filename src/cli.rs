@@ -27,15 +27,23 @@ struct Args {
     iec: bool,
 }
 
-fn process_path(file_path: &str) -> Result<Output, ()> {
+fn process_path(path: &str) -> Result<Output, String> {
+    // check if file or directory
+    let file_path = std::path::Path::new(path);
+    if file_path.is_dir() {
+        return Err(format!("{} - Directory", file_path.display()));
+    }
     let data = match std::fs::read(file_path) {
         Ok(data) => data,
         Err(err) => {
-            println!("Error reading file: {}", err);
-            return Err(());
+            return Err(format!(
+                "Error: {} is not readable - {}",
+                file_path.display(),
+                err
+            ));
         }
     };
-    let infos = crate::process_file_raw(&data, file_path);
+    let infos = crate::process_file_raw(&data, path);
     Ok(infos)
 }
 
@@ -50,8 +58,7 @@ pub fn cli_main() -> i32 {
                 Ok(res) => {
                     res_vec.push(res);
                 }
-                Err(_) => {
-                    // println!("Error processing file: {}", one_file);
+                Err(_err) => {
                     code = 3;
                 }
             }
@@ -75,10 +82,10 @@ pub fn cli_main() -> i32 {
                         crate::get_size(res.file_len, !args.bytes, args.iec),
                     );
                 }
-                Err(_) => {
+                Err(err) => {
                     code = 3;
                     if !args.no_error {
-                        println!("Error processing file: {}", one_file);
+                        println!("{}", err);
                     }
                 }
             }
